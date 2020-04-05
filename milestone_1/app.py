@@ -1,11 +1,6 @@
 MENU_PROMPT = "\nEnter 'a' to add a movie, 'l' to see your movies, 'f' to find a movie by title, or 'q' to quit: "
 
-movies = [
-    {"title": "Titanic", "director": "Cameron", "year": "1995"},
-    {"title": "Pulp Fiction", "director": "Tarantino", "year": "1997"},
-    {"title": "Matix", "director": "Lynch", "year": "1998"},
-    {"title": "Dead", "director": "Lynch", "year": "1995"},
-]
+movies = []
 
 
 def add_movie():
@@ -20,7 +15,7 @@ def add_movie():
     })
 
 
-def show_movies(movies_list):
+def list_movies(movies_list):
     if len(movies_list):
         for counter, movie in enumerate(movies_list, start=1):
             title = movie["title"]
@@ -73,7 +68,7 @@ while selection != 'q':
     if selection == 'a':
         add_movie()
     elif selection == 'l':
-        show_movies(movies)
+        list_movies(movies)
     elif selection == 'f':
         find_movie(movies)
     else:
