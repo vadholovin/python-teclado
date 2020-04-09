@@ -1,5 +1,5 @@
 MENU_PROMPT = "\nEnter 'a' to add a movie, 'l' to see your movies, 'f' to find a movie by title, or 'q' to quit: "
-
+FIND_PROMPT = "\nEnter 't' to search by title, 'd' - by director, 'y' - by year: "
 movies = []
 
 
@@ -15,63 +15,74 @@ def add_movie():
     })
 
 
-def list_movies(movies_list):
-    if len(movies_list):
-        for counter, movie in enumerate(movies_list, start=1):
+def show_movies():
+    if len(movies):
+        for counter, movie in enumerate(movies, start=1):
             title = movie["title"]
             director = movie["director"]
             year = movie["year"]
-            output = f"{counter}. Title: {title}, Director: {director}, Year: {year}"
+            output = f"{counter}. Title: {title}, " \
+                     f"Director: {director}, " \
+                     f"Release year: {year}"
 
             print(output)
     else:
         print("\nThe movie list is empty. Add a movie.")
 
 
-def find_movie(movies_list):
-    if len(movies_list) == 0:
-        print("\nThe movie list is empty. Add a movie.")
+find_movie_options = {
+    't': 'title',
+    'd': 'director',
+    'y': 'year',
+}
+
+
+def find_movie():
+    if len(movies) == 0:
+        print("The movie list is empty. Add a movie.")
         return None
 
-    query_prompt = "\nEnter 't' for searching by title, 'd' - by director, 'y' - by year: "
-    value_prompt = "\nSearching for: "
-    queries = {
-        't': 'title',
-        'd': 'director',
-        'y': 'year',
-    }
+    q = input(FIND_PROMPT)
 
-    query = input(query_prompt)
-    if query == 't' or query == 'd' or query == 'y':
-        search_query = queries[query]
-        search_value = input(value_prompt)
+    if q in find_movie_options:
+        search_option = find_movie_options[q]
+        search_query = input("\nSearching for: ")
         counter = 0
 
-        for movie in movies_list:
+        for movie in movies:
             title = movie["title"]
             director = movie["director"]
             year = movie["year"]
 
-            if movie[search_query].lower() == search_value.lower():
-                print(f"Title: {title}, Director: {director}, Year: {year}")
+            if movie[search_option].lower() == search_query.lower():
+                print(f"\nTitle: {title},\nDirector: {director},\nYear: {year}")
                 counter += 1
 
         if counter == 0:
             print('Found no movies')
+
     else:
         print('Unknown command. Please try again.')
+
+
+menu_options = {
+    'a': add_movie,
+    'l': show_movies,
+    'f': find_movie
+}
+
+
+def show_menu(user_selection):
+    while user_selection != 'q':
+        if user_selection in menu_options:
+            selected_option = menu_options[user_selection]
+            selected_option()
+        else:
+            print('Unknown command. Please try again.')
+
+        user_query = input(MENU_PROMPT)
 
 
 selection = input(MENU_PROMPT)
 
-while selection != 'q':
-    if selection == 'a':
-        add_movie()
-    elif selection == 'l':
-        list_movies(movies)
-    elif selection == 'f':
-        find_movie(movies)
-    else:
-        print('Unknown command. Please try again.')
-
-    selection = input(MENU_PROMPT)
+show_menu(selection)
